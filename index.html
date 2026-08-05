@@ -176,27 +176,27 @@
 
       <!-- 阶段3：沉浸式学习 -->
       <div class="immersive-learn" id="immersive-learn" style="display:none;">
-        <button class="exit-float" id="btn-exit-learn" title="退出学习">关闭</button>
         <div class="char-card" id="char-card">
           <div class="big-char" id="big-char" title="点击朗读"></div>
           <div class="pinyin-text" id="pinyin-text"></div>
           <div class="sentence-text" id="sentence-text"></div>
           <div class="word-groups" id="word-groups"></div>
         </div>
-        <div class="char-actions">
-          <button class="btn btn-primary btn-lg" id="btn-know">✅ 我认识</button>
-          <button class="btn btn-outline btn-lg" id="btn-dunno">🤔 不认识</button>
-          <button class="btn btn-secondary btn-lg" id="btn-prev">⬅ 上一个</button>
-          <button class="btn btn-secondary btn-lg" id="btn-next">⏭ 下一个</button>
-          <button class="btn btn-speak btn-lg" id="btn-speak-sentence">🔊 朗读句子</button>
-          <button class="btn btn-landscape btn-lg" id="btn-landscape">📱 一键横屏</button>
-        </div>
-        <div class="char-index" id="char-index"></div>
-        <div class="char-progress" style="justify-content:center;margin-top:12px">
-          已学 <span class="count" id="learned-count">0</span>
-          / <span id="total-count">0</span> 字
-          <div class="progress-bar" style="width:200px">
-            <div class="fill" id="learn-progress-bar" style="width:0%"></div>
+        <div class="char-right-col">
+          <button class="exit-btn" id="btn-exit-learn">关闭</button>
+          <div class="char-actions">
+            <button class="btn btn-primary btn-lg" id="btn-know">✅ 我认识</button>
+            <button class="btn btn-outline btn-lg" id="btn-dunno">🤔 不认识</button>
+            <button class="btn btn-secondary btn-lg" id="btn-prev">⬅ 上一个</button>
+            <button class="btn btn-secondary btn-lg" id="btn-next">⏭ 下一个</button>
+            <button class="btn btn-speak btn-lg" id="btn-speak-sentence">🔊 朗读句子</button>
+          </div>
+          <div class="char-index" id="char-index"></div>
+          <div class="char-progress">
+            <span>已学 <span class="count" id="learned-count">0</span> / <span id="total-count">0</span> 字</span>
+            <div class="progress-bar" style="width:160px">
+              <div class="fill" id="learn-progress-bar" style="width:0%"></div>
+            </div>
           </div>
         </div>
       </div>
