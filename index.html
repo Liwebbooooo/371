@@ -177,7 +177,6 @@
       <!-- 阶段3：沉浸式学习 -->
       <div class="immersive-learn" id="immersive-learn" style="display:none;">
         <button class="exit-float" id="btn-exit-learn" title="退出学习">关闭</button>
-        <div class="char-index" id="char-index"></div>
         <div class="char-card" id="char-card">
           <div class="big-char" id="big-char" title="点击朗读"></div>
           <div class="pinyin-text" id="pinyin-text"></div>
@@ -190,8 +189,10 @@
           <button class="btn btn-secondary btn-lg" id="btn-prev">⬅ 上一个</button>
           <button class="btn btn-secondary btn-lg" id="btn-next">⏭ 下一个</button>
           <button class="btn btn-speak btn-lg" id="btn-speak-sentence">🔊 朗读句子</button>
+          <button class="btn btn-landscape btn-lg" id="btn-landscape">📱 一键横屏</button>
         </div>
-        <div class="char-progress" style="justify-content:center;margin-top:16px">
+        <div class="char-index" id="char-index"></div>
+        <div class="char-progress" style="justify-content:center;margin-top:12px">
           已学 <span class="count" id="learned-count">0</span>
           / <span id="total-count">0</span> 字
           <div class="progress-bar" style="width:200px">
@@ -308,6 +309,16 @@
       <button class="btn btn-primary" id="login-btn" style="width:100%;margin-top:12px;padding:12px">🚀 开始学习</button>
       <button class="btn btn-outline" id="login-back-btn" style="width:100%;margin-top:8px;padding:10px">↩ 返回学习</button>
       <div id="login-user-list" style="margin-top:16px"></div>
+    </div>
+  </div>
+
+  <!-- 旋转提示（竖屏时显示） -->
+  <div class="rotate-overlay" id="rotate-overlay" style="display:none;">
+    <div class="rotate-card">
+      <div class="rotate-icon">📱</div>
+      <h2>请旋转屏幕</h2>
+      <p>为了更好地学习体验<br>请将设备横屏使用</p>
+      <div class="rotate-arrow">↻</div>
     </div>
   </div>
 

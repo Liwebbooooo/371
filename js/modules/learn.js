@@ -203,7 +203,6 @@ const LearnModule = {
   // 退出沉浸式学习
   // ========================================
   exitImmersive() {
-    this.unlockOrientation();
     this.showStage('grade');
     this.renderGradeGrid(); // 刷新进度
   },
@@ -591,12 +590,25 @@ const LearnModule = {
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
     const btnSpeak = document.getElementById('btn-speak-sentence');
+    const btnLandscape = document.getElementById('btn-landscape');
 
     if (btnKnow) btnKnow.addEventListener('click', () => this.markAsLearned());
     if (btnDunno) btnDunno.addEventListener('click', () => this.skipChar());
     if (btnPrev) btnPrev.addEventListener('click', () => this.prevChar());
     if (btnNext) btnNext.addEventListener('click', () => this.nextChar());
     if (btnSpeak) btnSpeak.addEventListener('click', () => this.speakSentence());
+    if (btnLandscape) {
+      btnLandscape.addEventListener('click', () => {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('landscape').catch(err => {
+            App.showToast('一键横屏失败，请手动旋转设备', 'error');
+            console.warn('lock landscape failed', err);
+          });
+        } else {
+          App.showToast('当前设备不支持自动横屏，请手动旋转', 'info');
+        }
+      });
+    }
 
     // 键盘快捷键（仅在沉浸式学习时）
     document.addEventListener('keydown', (e) => {

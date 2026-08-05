@@ -103,6 +103,9 @@ const App = {
 
     // 默认进入学科选择页
     this.navigateTo('subjects');
+
+    // 全局横屏管理
+    this.setupOrientation();
   },
 
   // === 学科选择卡片 ===
@@ -160,6 +163,36 @@ const App = {
         }
       });
     }
+  },
+
+  // === 全局横屏管理 ===
+  setupOrientation() {
+    const rotateOverlay = document.getElementById('rotate-overlay');
+
+    const checkOrientation = () => {
+      const isPortrait = window.innerHeight > window.innerWidth;
+      const isMobile = window.innerWidth <= 1024;
+      // 手机/平板竖屏时显示旋转提示
+      if (isPortrait && isMobile && rotateOverlay) {
+        rotateOverlay.classList.add('show');
+      } else if (rotateOverlay) {
+        rotateOverlay.classList.remove('show');
+      }
+    };
+
+    // 尝试锁横屏
+    if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
+      window.screen.orientation.lock('landscape').catch(() => {});
+    }
+
+    // 监听方向变化
+    window.addEventListener('orientationchange', () => {
+      setTimeout(checkOrientation, 100);
+    });
+    window.addEventListener('resize', checkOrientation);
+
+    // 初始化检测
+    checkOrientation();
   },
 
   // === 导航 ===

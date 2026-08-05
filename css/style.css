@@ -338,6 +338,8 @@ body {
 
 .btn-speak { background: var(--c-amber); color: white; font-weight: 600; }
 .btn-speak:hover { background: #d97706; }
+.btn-landscape { background: var(--c-violet); color: white; font-weight: 600; }
+.btn-landscape:hover { background: #7c3aed; }
 
 .btn-danger { background: var(--c-rose); }
 .btn-danger:hover { background: #e11d48; }
@@ -1276,9 +1278,6 @@ body.immersive-mode .main-content {
 }
 .immersive-learn .exit-float:hover { background: var(--c-rose); color: white; border-color: var(--c-rose); }
 .immersive-learn .char-index {
-  position: fixed;
-  top: 20px; left: 50%;
-  transform: translateX(-50%);
   font-size: 14px;
   color: var(--text-secondary);
   background: white;
@@ -1286,6 +1285,7 @@ body.immersive-mode .main-content {
   border-radius: 20px;
   border: 1px solid var(--border);
   z-index: 100;
+  margin-top: 16px;
   box-shadow: var(--shadow-sm);
 }
 .immersive-learn .char-card {
@@ -1302,15 +1302,13 @@ body.immersive-mode .main-content {
 .immersive-learn .word-tag-text { font-size: 18px; }
 .immersive-learn .word-tag-pinyin { font-size: 11px; }
 .immersive-learn .char-progress {
-  position: fixed;
-  bottom: 20px; left: 50%;
-  transform: translateX(-50%);
   background: white;
   padding: 8px 18px;
   border-radius: 20px;
   border: 1px solid var(--border);
   white-space: nowrap;
   box-shadow: var(--shadow-sm);
+  margin-top: 12px;
 }
 
 /* ========================================
@@ -1332,8 +1330,10 @@ body.immersive-mode .main-content {
   .immersive-learn .big-char { font-size: 80px; }
   .immersive-learn .pinyin-text { font-size: 22px; margin-bottom: 12px; }
   .immersive-learn .sentence-text { font-size: 18px; margin-bottom: 14px; }
-  .immersive-learn .char-actions { flex-direction: column; flex: 0 0 160px; gap: 10px; }
-  .immersive-learn .char-actions .btn { width: 100%; padding: 10px 12px; font-size: 14px; }
+  .immersive-learn .char-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 0 0 auto; max-width: 320px; }
+  .immersive-learn .char-actions .btn { width: 100%; padding: 10px 12px; font-size: 13px; }
+  .immersive-learn .char-actions #btn-speak-sentence,
+  .immersive-learn .char-actions #btn-landscape { grid-column: 1 / -1; }
 }
 
 /* ========================================
@@ -1399,6 +1399,7 @@ body.immersive-mode .main-content {
   .char-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .char-actions .btn { width: 100%; padding: 10px 6px; font-size: 13px; }
   #btn-speak-sentence { grid-column: 1 / -1; }
+  #btn-landscape { grid-column: 1 / -1; }
 
   .options-grid { gap: 8px; }
   .option-btn { font-size: 19px; padding: 12px; }
@@ -1422,6 +1423,37 @@ body.immersive-mode .main-content {
   .sc-char-wrap { padding: 1px 2px; min-width: 18px; }
   .char-actions .btn { padding: 8px 4px; font-size: 12px; }
   .grade-chip { padding: 3px 6px; font-size: 10px; }
+}
+
+/* ========================================
+   旋转屏幕提示
+   ======================================== */
+.rotate-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--c-slate-800);
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.rotate-overlay.show { display: flex; }
+.rotate-card {
+  text-align: center;
+  color: white;
+  padding: 40px;
+}
+.rotate-icon { font-size: 64px; margin-bottom: 20px; }
+.rotate-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+.rotate-card p { font-size: 16px; opacity: 0.75; line-height: 1.6; }
+.rotate-arrow {
+  font-size: 48px;
+  margin-top: 24px;
+  animation: rotate-hint 1.5s ease-in-out infinite;
+}
+@keyframes rotate-hint {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
 }
 
 /* ========================================
