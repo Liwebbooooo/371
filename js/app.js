@@ -1,20 +1,19 @@
 /* ========================================
-   主应用控制器 - 路由、状态管理、多用户、排行榜
+   主应用控制器 v2 — 学科→模块两级导航
    ======================================== */
 
 const App = {
-  currentModule: 'learn',
+  currentModule: 'subjects',   // 当前模块（subjects / home / learn / ...）
+  currentSubject: null,        // 当前学科：'chinese' | 'math'
   initialized: false,
 
   init() {
     if (this.initialized) return;
     this.initialized = true;
-
-    // 先检查用户登录
     this.checkUserLogin();
   },
 
-  // === 用户登录检查 ===
+  // === 用户登录 ===
   checkUserLogin() {
     const user = Storage.getCurrentUser();
     if (!user) {
@@ -36,29 +35,15 @@ const App = {
 
     if (!input || !btn) return;
 
-    // 关闭按钮 / 返回学习按钮：取消切换，回到当前用户
-    const doClose = () => {
-      if (overlay) overlay.style.display = 'none';
-    };
+    const doClose = () => { if (overlay) overlay.style.display = 'none'; };
+    if (closeBtn) closeBtn.onclick = doClose;
+    if (backBtn) backBtn.onclick = doClose;
+    overlay.onclick = (e) => { if (e.target === overlay) doClose(); };
 
-    if (closeBtn) {
-      closeBtn.onclick = doClose;
-    }
-    if (backBtn) {
-      backBtn.onclick = doClose;
-    }
-
-    // 点击遮罩层关闭
-    overlay.onclick = (e) => {
-      if (e.target === overlay) doClose();
-    };
-
-    // 预填昵称：当前用户 > 上次使用用户
     const currentUser = Storage.getCurrentUser();
     const lastUser = localStorage.getItem('study_lastUser');
     input.value = currentUser || lastUser || '';
 
-    // 已有用户列表
     const users = Storage.getAllUsers();
     if (list && users.length > 0) {
       list.innerHTML = '<p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">或点击已有用户直接进入：</p>';
@@ -66,9 +51,7 @@ const App = {
         const chip = document.createElement('span');
         chip.className = 'login-user-chip';
         chip.textContent = u.nickname;
-        chip.addEventListener('click', () => {
-          this._doLogin(u.nickname);
-        });
+        chip.addEventListener('click', () => this._doLogin(u.nickname));
         list.appendChild(chip);
       });
     }
@@ -81,7 +64,6 @@ const App = {
       }
       this._doLogin(name);
     };
-
     btn.onclick = doLogin;
     input.onkeydown = (e) => { if (e.key === 'Enter') doLogin(); };
     input.focus();
@@ -97,14 +79,13 @@ const App = {
 
   // === 启动应用 ===
   startApp() {
-    // 确保登录浮层已隐藏
     const overlay = document.getElementById('login-overlay');
     if (overlay) overlay.style.display = 'none';
 
-    // 更新用户名显示
     this.updateUserDisplay();
-
     this.setupNavigation();
+    this.setupSubjectCards();
+    this.setupHomeCards();
     this.updateScoreDisplay();
     this.updateStreakDisplay();
     this.checkDailyReset();
@@ -120,32 +101,145 @@ const App = {
     QuizModule.init();
     DailyModule.init();
 
-    // 默认显示汉字学习
-    this.navigateTo('learn');
+    // 默认进入学科选择页
+    this.navigateTo('subjects');
   },
 
-  // === 用户名 & 排行榜 显示 ===
+  // === 学科选择卡片 ===
+  setupSubjectCards() {
+    const chineseCard = document.getElementById('subject-chinese');
+    const mathCard = document.getElementById('subject-math');
+
+    if (chineseCard) {
+      chineseCard.addEventListener('click', () => {
+        this.currentSubject = 'chinese';
+        this.navigateTo('home');
+      });
+    }
+
+    if (mathCard) {
+      mathCard.addEventListener('click', () => {
+        this.showToast('数学模块即将上线，敬请期待！', 'info');
+      });
+    }
+
+    // 返回首页按钮
+    const backHomeBtn = document.getElementById('btn-back-home');
+    if (backHomeBtn) {
+      backHomeBtn.addEventListener('click', () => this.navigateTo('home'));
+    }
+
+    // 主页按钮（返回学科选择）
+    const backSubjectsBtn = document.getElementById('btn-back-subjects');
+    if (backSubjectsBtn) {
+      backSubjectsBtn.addEventListener('click', () => this.navigateTo('subjects'));
+    }
+  },
+
+  // === 首页卡片 ===
+  setupHomeCards() {
+    document.querySelectorAll('.home-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const module = card.dataset.module;
+        if (module === 'learn') {
+          LearnModule.showStage('grade');
+          LearnModule.renderGradeGrid();
+        }
+        if (module) this.navigateTo(module);
+      });
+    });
+
+    // 点击 logo：在模块页→返回首页，在首页→返回学科选择
+    const logo = document.getElementById('logo-home');
+    if (logo) {
+      logo.addEventListener('click', () => {
+        if (this.currentModule === 'home') {
+          this.navigateTo('subjects');
+        } else {
+          this.navigateTo('home');
+        }
+      });
+    }
+  },
+
+  // === 导航 ===
+  setupNavigation() {
+    document.querySelectorAll('.nav-blocks .nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const module = item.dataset.module;
+        if (module) this.navigateTo(module);
+      });
+    });
+  },
+
+  navigateTo(module) {
+    this.currentModule = module;
+
+    // 离开沉浸学习
+    if (module !== 'learn' && LearnModule.isImmersive) {
+      LearnModule.exitImmersive();
+    }
+
+    // 进入汉字学习时确保显示年级页
+    if (module === 'learn') {
+      LearnModule.showStage('grade');
+      LearnModule.renderGradeGrid();
+    }
+
+    // 控制导航栏和返回按钮显示
+    const navBlocks = document.getElementById('nav-blocks');
+    const backHomeBtn = document.getElementById('btn-back-home');
+    const backSubjectsBtn = document.getElementById('btn-back-subjects');
+
+    if (module === 'subjects') {
+      // 学科选择页：无导航栏，无返回按钮
+      if (navBlocks) navBlocks.style.display = 'none';
+      if (backHomeBtn) backHomeBtn.style.display = 'none';
+      if (backSubjectsBtn) backSubjectsBtn.style.display = 'none';
+    } else if (module === 'home') {
+      // 模块首页：无导航栏，只显示"主页"按钮
+      if (navBlocks) navBlocks.style.display = 'none';
+      if (backHomeBtn) backHomeBtn.style.display = 'none';
+      if (backSubjectsBtn) backSubjectsBtn.style.display = '';
+    } else {
+      // 功能模块页：显示导航栏、返回按钮、主页按钮
+      if (navBlocks) navBlocks.style.display = '';
+      if (backHomeBtn) backHomeBtn.style.display = '';
+      if (backSubjectsBtn) backSubjectsBtn.style.display = '';
+    }
+
+    // 导航高亮
+    document.querySelectorAll('.nav-blocks .nav-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.module === module);
+    });
+
+    // 切换模块显示
+    document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+    const target = document.getElementById(`module-${module}`);
+    if (target) target.classList.add('active');
+
+    // 首页/学科页取消所有导航高亮
+    if (module === 'home' || module === 'subjects') {
+      document.querySelectorAll('.nav-blocks .nav-item').forEach(item => item.classList.remove('active'));
+    }
+
+    TTS.stop();
+  },
+
+  // === 用户显示 ===
   updateUserDisplay() {
     const user = Storage.getCurrentUser();
     const nameEl = document.getElementById('user-name');
     if (nameEl) nameEl.textContent = user || '';
 
-    // 排行榜入口按钮
     const rankBtn = document.getElementById('btn-show-leaderboard');
-    if (rankBtn) {
-      rankBtn.addEventListener('click', () => this.showLeaderboard());
-    }
+    if (rankBtn) rankBtn.addEventListener('click', () => this.showLeaderboard());
 
-    // 切换用户按钮
     const switchBtn = document.getElementById('btn-switch-user');
-    if (switchBtn) {
-      switchBtn.addEventListener('click', () => {
-        this.showLoginScreen();
-      });
-    }
+    if (switchBtn) switchBtn.addEventListener('click', () => this.showLoginScreen());
   },
 
-  // === 排行榜弹窗 ===
+  // === 排行榜 ===
   showLeaderboard() {
     const board = Storage.getTodayLeaderboard();
     const user = Storage.getCurrentUser();
@@ -166,36 +260,14 @@ const App = {
         html += `<div class="lb-row${isMe ? ' lb-me' : ''}">
           <span>${medal || rank}</span>
           <span>${entry.nickname}${isMe ? ' (我)' : ''}</span>
-          <span style="color:var(--primary);font-weight:600">${entry.todayScore}</span>
-          <span style="color:var(--text-light)">${entry.totalScore}</span>
+          <span style="color:var(--c-indigo);font-weight:600">${entry.todayScore}</span>
+          <span style="color:var(--text-secondary)">${entry.totalScore}</span>
         </div>`;
       });
       html += '</div>';
       content.innerHTML = html;
     }
-
     this.showModal('🏆 今日排行', content.outerHTML);
-  },
-
-  // === 导航 ===
-  setupNavigation() {
-    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const module = item.dataset.module;
-        if (module) this.navigateTo(module);
-      });
-    });
-  },
-
-  navigateTo(module) {
-    this.currentModule = module;
-    document.querySelectorAll('.sidebar .nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.module === module);
-    });
-    document.querySelectorAll('.module').forEach(m => {
-      m.classList.toggle('active', m.id === `module-${module}`);
-    });
-    TTS.stop();
   },
 
   // === 积分 ===
@@ -235,9 +307,7 @@ const App = {
   checkDailyReset() {
     const daily = Storage.getDaily();
     const today = new Date().toISOString().split('T')[0];
-    if (daily.date !== today) {
-      DailyModule.generateTasks();
-    }
+    if (daily.date !== today) DailyModule.generateTasks();
   },
 
   // === 神兽体力 ===
@@ -267,7 +337,7 @@ const App = {
       toast.style.opacity = '0';
       toast.style.transition = 'opacity 0.3s ease';
       setTimeout(() => toast.remove(), 300);
-    }, 2000);
+    }, 2200);
   },
 
   // === Modal ===

@@ -11,82 +11,177 @@
 
   <!-- 顶部导航栏 -->
   <header class="topbar">
-    <div class="logo">
+    <div class="logo" id="logo-home">
       <svg viewBox="0 0 32 32" fill="none">
-        <rect x="4" y="2" width="24" height="28" rx="3" fill="#3D7EC5"/>
+        <rect x="4" y="2" width="24" height="28" rx="3" fill="white" opacity="0.25"/>
         <rect x="8" y="6" width="16" height="20" rx="2" fill="white"/>
-        <line x1="12" y1="12" x2="20" y2="12" stroke="#3D7EC5" stroke-width="2" stroke-linecap="round"/>
-        <line x1="12" y1="16" x2="20" y2="16" stroke="#3D7EC5" stroke-width="2" stroke-linecap="round"/>
-        <line x1="12" y1="20" x2="18" y2="20" stroke="#3D7EC5" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="12" x2="20" y2="12" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="16" x2="20" y2="16" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="20" x2="18" y2="20" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
       </svg>
       小学学习工作台
     </div>
     <div class="user-info">
-      <button class="btn btn-sm btn-outline" id="btn-show-leaderboard" style="margin-right:6px">🏆 排行</button>
-      <span style="font-size:13px;color:var(--text-muted);margin-right:4px">👤</span>
-      <span id="user-name" style="font-size:14px;font-weight:500;margin-right:12px"></span>
-      <button class="btn btn-sm btn-outline" id="btn-switch-user" style="font-size:12px;padding:4px 8px">切换</button>
-      <div class="streak-badge" title="连续学习天数" style="margin-left:12px">
-        🔥 <span id="streak-display">0</span> 天
-      </div>
-      <div class="score-badge" title="我的积分">
-        ⭐ <span id="score-display">0</span> 分
-      </div>
+      <button class="btn btn-sm btn-back-nav" id="btn-back-home" style="display:none">← 返回</button>
+      <button class="btn btn-sm btn-back-nav" id="btn-back-subjects" style="display:none">🏠 主页</button>
+      <button class="btn btn-sm btn-outline" id="btn-show-leaderboard" style="margin-right:4px">🏆 排行</button>
+      <span id="user-name" style="font-size:14px;font-weight:500;margin-right:8px"></span>
+      <button class="btn btn-sm btn-ghost" id="btn-switch-user" style="font-size:12px">切换</button>
+      <span class="badge badge-warm" style="margin-left:8px">🔥 <span id="streak-display">0</span> 天</span>
+      <span class="badge badge-primary">⭐ <span id="score-display">0</span></span>
     </div>
   </header>
 
-  <!-- 侧边导航 -->
-  <nav class="sidebar">
-    <div class="nav-section">
-      <div class="nav-section-title">📖 学习中心</div>
-      <div class="nav-item active" data-module="learn">
-        <span class="nav-icon">✏️</span> 汉字学习
-      </div>
-      <div class="nav-item" data-module="charlist">
-        <span class="nav-icon">📋</span> 汉字列表
-      </div>
-      <div class="nav-item" data-module="sentence">
-        <span class="nav-icon">📝</span> 补全句子
-      </div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-section-title">📜 经典传承</div>
-      <div class="nav-item" data-module="poetry">
-        <span class="nav-icon">🏯</span> 古诗词
-      </div>
-      <div class="nav-item" data-module="idiom">
-        <span class="nav-icon">💬</span> 成语谚语
-      </div>
-    </div>
-    <div class="nav-section">
-      <div class="nav-section-title">🎮 趣味天地</div>
-      <div class="nav-item" data-module="pet">
-        <span class="nav-icon">🐉</span> 神兽领养
-      </div>
-      <div class="nav-item" data-module="quiz">
-        <span class="nav-icon">🏆</span> 知识闯关
-      </div>
-      <div class="nav-item" data-module="daily">
-        <span class="nav-icon">🎯</span> 每日挑战
-      </div>
+  <!-- 水平导航块（只在一级模块页显示） -->
+  <nav class="nav-blocks" id="nav-blocks">
+    <div class="nav-block-inner">
+      <button class="nav-item" data-module="learn">
+        <span class="nav-icon">✏️</span>
+        <span class="nav-label">汉字学习</span>
+      </button>
+      <button class="nav-item" data-module="charlist">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">汉字列表</span>
+      </button>
+      <button class="nav-item" data-module="sentence">
+        <span class="nav-icon">📝</span>
+        <span class="nav-label">补全句子</span>
+      </button>
+      <button class="nav-item" data-module="poetry">
+        <span class="nav-icon">🏯</span>
+        <span class="nav-label">古诗词</span>
+      </button>
+      <button class="nav-item" data-module="idiom">
+        <span class="nav-icon">💬</span>
+        <span class="nav-label">成语谚语</span>
+      </button>
+      <button class="nav-item" data-module="pet">
+        <span class="nav-icon">🐉</span>
+        <span class="nav-label">神兽领养</span>
+      </button>
+      <button class="nav-item" data-module="quiz">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">知识闯关</span>
+      </button>
+      <button class="nav-item" data-module="daily">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-label">每日挑战</span>
+      </button>
     </div>
   </nav>
 
   <!-- 主内容区 -->
   <main class="main-content">
 
-    <!-- 模块1：汉字学习 -->
-    <section class="module active" id="module-learn">
-      <div class="learn-header">
-        <h2 style="font-size:22px">✏️ 汉字学习</h2>
+    <!-- 0级：学科选择 -->
+    <section class="module active" id="module-subjects">
+      <div class="subjects-page">
+        <h1>📚 选择学科</h1>
+        <p class="subtitle">选择一个学科开始今天的学习吧</p>
+        <div class="subjects-grid">
+          <div class="subject-card chinese" id="subject-chinese">
+            <div class="subject-icon">📖</div>
+            <div class="subject-name">语文</div>
+            <div class="subject-desc">汉字 · 诗词 · 成语 · 阅读</div>
+            <span class="subject-badge active">8大模块</span>
+          </div>
+          <div class="subject-card math" id="subject-math">
+            <div class="subject-icon">🧮</div>
+            <div class="subject-name">数学</div>
+            <div class="subject-desc">口算 · 应用题 · 思维训练</div>
+            <span class="subject-badge coming">即将上线</span>
+          </div>
+        </div>
       </div>
-      <div class="grade-selector" id="grade-selector"></div>
-      <div style="margin-top:16px">
+    </section>
+
+    <!-- 1级首页：模块选择 -->
+    <section class="module" id="module-home">
+      <div class="home-grid">
+        <div class="home-card" data-module="learn">
+          <div class="home-icon">✏️</div>
+          <div class="home-title">汉字学习</div>
+          <div class="home-sub">拼音·组词·发音</div>
+        </div>
+        <div class="home-card" data-module="sentence">
+          <div class="home-icon">📝</div>
+          <div class="home-title">补全句子</div>
+          <div class="home-sub">选字填空 +5分</div>
+        </div>
+        <div class="home-card" data-module="poetry">
+          <div class="home-icon">🏯</div>
+          <div class="home-title">古诗词</div>
+          <div class="home-sub">逐字拼音·朗读</div>
+        </div>
+        <div class="home-card" data-module="idiom">
+          <div class="home-icon">💬</div>
+          <div class="home-title">成语谚语</div>
+          <div class="home-sub">带释义·必背</div>
+        </div>
+        <div class="home-card" data-module="pet">
+          <div class="home-icon">🐉</div>
+          <div class="home-title">神兽领养</div>
+          <div class="home-sub">学习赚积分喂养</div>
+        </div>
+        <div class="home-card" data-module="quiz">
+          <div class="home-icon">🏆</div>
+          <div class="home-title">知识闯关</div>
+          <div class="home-sub">9大分类·649题</div>
+        </div>
+        <div class="home-card" data-module="charlist">
+          <div class="home-icon">📋</div>
+          <div class="home-title">汉字列表</div>
+          <div class="home-sub">3575字·搜索筛选</div>
+        </div>
+        <div class="home-card" data-module="daily">
+          <div class="home-icon">🎯</div>
+          <div class="home-title">每日挑战</div>
+          <div class="home-sub">5任务·每日刷新</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 模块1：汉字学习 -->
+    <section class="module" id="module-learn">
+      <!-- 阶段1：年级选择 -->
+      <div class="learn-stage" id="learn-stage-grade">
+        <h2>✏️ 选择年级</h2>
+        <div class="learn-stage-subtitle">选择要学习的年级课本</div>
+        <div class="grade-grid" id="grade-grid"></div>
+      </div>
+
+      <!-- 阶段2：学习模式选择 -->
+      <div class="learn-stage" id="learn-stage-mode" style="display:none;">
+        <h2>🎯 选择学习模式</h2>
+        <div class="learn-stage-subtitle">不同的学习方式，一样的进步</div>
+        <div class="mode-grid" id="mode-grid">
+          <div class="mode-card" data-mode="sequential">
+            <div class="mode-icon">➡️</div>
+            <div class="mode-title">顺序学习</div>
+            <div class="mode-sub">按课本顺序逐字学习</div>
+          </div>
+          <div class="mode-card" data-mode="random">
+            <div class="mode-icon">🎲</div>
+            <div class="mode-title">随机学习</div>
+            <div class="mode-sub">随机抽取汉字练习</div>
+          </div>
+          <div class="mode-card" data-mode="review">
+            <div class="mode-icon">🔁</div>
+            <div class="mode-title">查缺补漏</div>
+            <div class="mode-sub">只复习标记不认识的字</div>
+          </div>
+        </div>
+        <button class="btn btn-outline" id="btn-back-to-grade" style="margin-top:24px;">← 返回选择年级</button>
+      </div>
+
+      <!-- 阶段3：沉浸式学习 -->
+      <div class="immersive-learn" id="immersive-learn" style="display:none;">
+        <button class="exit-float" id="btn-exit-learn" title="退出学习">关闭</button>
         <div class="char-index" id="char-index"></div>
         <div class="char-card" id="char-card">
           <div class="big-char" id="big-char" title="点击朗读"></div>
           <div class="pinyin-text" id="pinyin-text"></div>
-          <div class="sentence-text" id="sentence-text" title="点击朗读句子"></div>
+          <div class="sentence-text" id="sentence-text"></div>
           <div class="word-groups" id="word-groups"></div>
         </div>
         <div class="char-actions">
@@ -205,7 +300,7 @@
   <!-- 登录界面 -->
   <div class="login-overlay" id="login-overlay" style="display:none;">
     <div class="login-card">
-      <button class="login-close" id="login-close" title="关闭">×</button>
+      <button class="login-close" id="login-close" title="关闭">关闭</button>
       <div class="login-icon">📚</div>
       <h2>小学学习工作台</h2>
       <p style="color:var(--text-muted);font-size:14px;margin-bottom:20px">输入昵称开始学习吧！</p>
