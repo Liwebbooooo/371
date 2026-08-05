@@ -39,6 +39,37 @@ const Storage = {
     return `${this._prefix}user_${encodeURIComponent(user)}_${name}`;
   },
 
+  // === 跨用户读取（不依赖 currentUser）===
+  _keyForUser(nickname, name) {
+    return `${this._prefix}user_${encodeURIComponent(nickname)}_${name}`;
+  },
+
+  getUserScore(nickname) {
+    try {
+      const raw = localStorage.getItem(this._keyForUser(nickname, 'score'));
+      return raw ? JSON.parse(raw) : 0;
+    } catch { return 0; }
+  },
+
+  getUserProgress(nickname) {
+    try {
+      const raw = localStorage.getItem(this._keyForUser(nickname, 'progress'));
+      if (raw) {
+        const p = JSON.parse(raw);
+        return { streak: p.streak || 0, lastStudyDate: p.lastStudyDate || null };
+      }
+    } catch {}
+    return { streak: 0, lastStudyDate: null };
+  },
+
+  // 统计某用户的总学习天数（从排行榜记录中计算）
+  countUserLearnDays(nickname) {
+    const board = this._getLeaderboardRaw();
+    const userScores = board[nickname];
+    if (!userScores) return 0;
+    return Object.keys(userScores).length;
+  },
+
   // === 通用读写 ===
   get(key, defaultValue = null) {
     try {
@@ -101,7 +132,7 @@ const Storage = {
     } catch { return {}; }
   },
 
-  // 获取今日排行榜：[{nickname, score, totalScore}]
+  // 获取今日排行榜：[{nickname, todayScore, totalScore, streak, learnDays}]
   getTodayLeaderboard() {
     const today = new Date().toISOString().split('T')[0];
     const board = this._getLeaderboardRaw();
@@ -111,8 +142,16 @@ const Storage = {
     for (const u of users) {
       const userScores = board[u.nickname] || {};
       const dayScore = userScores[today] || 0;
-      const totalScore = Object.values(userScores).reduce((a, b) => a + b, 0);
-      result.push({ nickname: u.nickname, todayScore: dayScore, totalScore });
+      const totalScore = this.getUserScore(u.nickname);  // 从 per-user 存储读取
+      const progress = this.getUserProgress(u.nickname);
+      const learnDays = this.countUserLearnDays(u.nickname);
+      result.push({
+        nickname: u.nickname,
+        todayScore: dayScore,
+        totalScore,
+        streak: progress.streak || 0,
+        learnDays,
+      });
     }
 
     result.sort((a, b) => b.todayScore - a.todayScore || b.totalScore - a.totalScore);

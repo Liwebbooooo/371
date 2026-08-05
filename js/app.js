@@ -282,7 +282,7 @@ const App = {
       content.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:20px">还没有学习记录，快去学习吧！</p>';
     } else {
       let html = '<div class="leaderboard-table">';
-      html += '<div class="lb-header"><span>排名</span><span>昵称</span><span>今日积分</span><span>总积分</span></div>';
+      html += '<div class="lb-header"><span>排名</span><span>昵称</span><span>今日积分</span><span>总积分</span><span>学习天数</span><span>连续</span></div>';
       board.forEach((entry, i) => {
         const rank = i + 1;
         let medal = '';
@@ -295,6 +295,8 @@ const App = {
           <span>${entry.nickname}${isMe ? ' (我)' : ''}</span>
           <span style="color:var(--c-indigo);font-weight:600">${entry.todayScore}</span>
           <span style="color:var(--text-secondary)">${entry.totalScore}</span>
+          <span style="color:var(--text-secondary)">${entry.learnDays} 天</span>
+          <span style="color:var(--c-amber);font-weight:600">🔥 ${entry.streak}</span>
         </div>`;
       });
       html += '</div>';

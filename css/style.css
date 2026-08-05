@@ -1216,7 +1216,7 @@ select:focus { border-color: var(--c-indigo); }
 .leaderboard-table { width: 100%; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); }
 .lb-header {
   display: grid;
-  grid-template-columns: 50px 1fr 90px 90px;
+  grid-template-columns: 40px 1fr 70px 70px 70px 55px;
   padding: 10px 12px;
   background: var(--c-slate-50);
   font-size: 12px;
@@ -1225,7 +1225,7 @@ select:focus { border-color: var(--c-indigo); }
 }
 .lb-row {
   display: grid;
-  grid-template-columns: 50px 1fr 90px 90px;
+  grid-template-columns: 40px 1fr 70px 70px 70px 55px;
   padding: 12px;
   font-size: 13px;
   border-bottom: 1px solid var(--border-light);
@@ -1248,12 +1248,13 @@ body.immersive-mode .main-content {
 .immersive-learn {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 100%; height: 100%;
-  padding: 20px 40px;
-  background: var(--bg);
+  padding: 14px 20px 18px;
+  background: var(--c-slate-200);
   position: relative;
+  overflow: hidden;
 }
 .immersive-learn .exit-btn {
   align-self: flex-end;
@@ -1269,103 +1270,134 @@ body.immersive-mode .main-content {
 }
 .immersive-learn .exit-btn:hover { background: var(--c-rose); color: white; border-color: var(--c-rose); }
 .immersive-learn .char-index {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
   background: white;
-  padding: 6px 18px;
+  padding: 5px 14px;
   border-radius: 20px;
   border: 1px solid var(--border);
   z-index: 100;
-  margin-top: 16px;
   box-shadow: var(--shadow-sm);
 }
 .immersive-learn .char-card {
-  max-width: 800px; width: 100%;
-  padding: 36px 44px;
-  margin: 0 auto;
+  max-width: 720px; width: 100%;
+  max-height: calc(100% - 200px);
+  padding: 20px 28px;
+  margin: 0 auto 10px;
+  overflow-y: auto;
 }
-.immersive-learn .big-char { font-size: 120px; }
-.immersive-learn .pinyin-text { font-size: 30px; margin-bottom: 24px; }
-.immersive-learn .sentence-text { font-size: 23px; padding: 16px 20px; margin-bottom: 22px; }
-.immersive-learn .sc-char { font-size: 23px; }
-.immersive-learn .sc-pinyin { font-size: 11px; }
-.immersive-learn .word-tag { padding: 10px 20px; }
-.immersive-learn .word-tag-text { font-size: 18px; }
-.immersive-learn .word-tag-pinyin { font-size: 11px; }
+.immersive-learn .big-char { font-size: 92px; line-height: 1.1; }
+.immersive-learn .pinyin-text { font-size: 24px; margin: 4px 0 12px; }
+.immersive-learn .sentence-text { font-size: 18px; padding: 10px 14px; margin-bottom: 12px; }
+.immersive-learn .sc-char { font-size: 18px; }
+.immersive-learn .sc-pinyin { font-size: 10px; }
+.immersive-learn .word-tag { padding: 7px 14px; }
+.immersive-learn .word-tag-text { font-size: 15px; }
+.immersive-learn .word-tag-pinyin { font-size: 10px; }
 .immersive-learn .char-progress {
   background: white;
-  padding: 8px 18px;
+  padding: 6px 14px;
   border-radius: 20px;
   border: 1px solid var(--border);
   white-space: nowrap;
   box-shadow: var(--shadow-sm);
-  margin-top: 12px;
+  font-size: 13px;
 }
 
 .immersive-learn .char-right-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+  flex-shrink: 0;
+}
+.immersive-learn .char-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+.immersive-learn .char-actions .btn {
+  width: 100%;
+  padding: 9px 8px;
+  font-size: 14px;
+}
+.immersive-learn .char-actions #btn-speak-sentence {
+  grid-column: 1 / -1;
 }
 
 /* ========================================
    横屏 — 左右分栏
    ======================================== */
-@media screen and (orientation: landscape) and (max-height: 500px) {
+@media screen and (orientation: landscape) {
   .immersive-learn {
-    padding: 10px 20px;
+    padding: 12px 24px 14px;
     flex-direction: row;
-    gap: 20px;
-    align-items: center;
+    gap: 18px;
+    align-items: stretch;
     justify-content: center;
   }
   .immersive-learn .char-card {
-    flex: 0 1 auto;
-    max-width: 48%;
-    padding: 16px 22px;
+    flex: 1 1 auto;
+    max-width: 52%;
+    max-height: 100%;
+    padding: 16px 24px;
+    margin: 0;
   }
-  .immersive-learn .big-char { font-size: 72px; }
-  .immersive-learn .pinyin-text { font-size: 20px; margin-bottom: 10px; }
-  .immersive-learn .sentence-text { font-size: 16px; padding: 10px 14px; margin-bottom: 10px; }
+  .immersive-learn .big-char { font-size: 84px; }
+  .immersive-learn .pinyin-text { font-size: 22px; margin: 4px 0 10px; }
+  .immersive-learn .sentence-text { font-size: 16px; padding: 10px 12px; margin-bottom: 10px; }
   .immersive-learn .sc-char { font-size: 16px; }
   .immersive-learn .sc-pinyin { font-size: 9px; }
-  .immersive-learn .word-tag { padding: 6px 14px; }
+  .immersive-learn .word-tag { padding: 6px 12px; }
   .immersive-learn .word-tag-text { font-size: 14px; }
   .immersive-learn .word-tag-pinyin { font-size: 9px; }
 
   .immersive-learn .char-right-col {
     flex: 0 0 auto;
-    max-width: 340px;
+    max-width: 300px;
     gap: 8px;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
   }
-  .immersive-learn .char-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-    width: 100%;
-  }
-  .immersive-learn .char-actions .btn {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 12px;
-  }
-  .immersive-learn .char-actions #btn-speak-sentence {
-    grid-column: 1 / -1;
-  }
-  .immersive-learn .char-index {
-    font-size: 12px;
-    padding: 4px 12px;
-    margin-top: 0;
-  }
-  .immersive-learn .char-progress {
-    font-size: 12px;
-    padding: 4px 12px;
-    margin-top: 0;
-  }
-  .immersive-learn .char-progress .progress-bar {
-    width: 120px !important;
-  }
+  .immersive-learn .char-actions { gap: 7px; }
+  .immersive-learn .char-actions .btn { padding: 8px 10px; font-size: 13px; }
+  .immersive-learn .char-index { font-size: 12px; padding: 4px 12px; }
+  .immersive-learn .char-progress { font-size: 12px; padding: 4px 12px; }
+  .immersive-learn .char-progress .progress-bar { width: 120px !important; }
+}
+
+/* 小平板/手机横屏（高度受限） */
+@media screen and (orientation: landscape) and (max-height: 520px) {
+  .immersive-learn { padding: 8px 16px 10px; gap: 12px; }
+  .immersive-learn .char-card { padding: 12px 18px; }
+  .immersive-learn .big-char { font-size: 64px; }
+  .immersive-learn .pinyin-text { font-size: 18px; margin-bottom: 6px; }
+  .immersive-learn .sentence-text { font-size: 14px; padding: 8px 10px; margin-bottom: 8px; }
+  .immersive-learn .sc-char { font-size: 14px; }
+  .immersive-learn .word-tag { padding: 5px 10px; }
+  .immersive-learn .word-tag-text { font-size: 12px; }
+  .immersive-learn .char-right-col { max-width: 260px; gap: 6px; }
+  .immersive-learn .char-actions { gap: 5px; }
+  .immersive-learn .char-actions .btn { padding: 6px 8px; font-size: 11px; }
+  .immersive-learn .char-index { font-size: 11px; padding: 3px 10px; }
+  .immersive-learn .char-progress { font-size: 11px; padding: 3px 10px; }
+  .immersive-learn .char-progress .progress-bar { width: 100px !important; }
+}
+
+/* 手机竖屏 */
+@media screen and (max-width: 600px) {
+  .immersive-learn { padding: 12px 16px 16px; }
+  .immersive-learn .char-card { max-height: calc(100% - 210px); padding: 16px 20px; }
+  .immersive-learn .big-char { font-size: 72px; }
+  .immersive-learn .pinyin-text { font-size: 22px; }
+  .immersive-learn .sentence-text { font-size: 16px; }
+  .immersive-learn .sc-char { font-size: 16px; }
+  .immersive-learn .char-right-col { max-width: 100%; }
+  .immersive-learn .char-actions .btn { font-size: 13px; }
 }
 
 /* ========================================
